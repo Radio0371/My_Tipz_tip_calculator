@@ -5,4 +5,8 @@
     <string name="round_total">Round Total?</string>
     <string name="split_tip">Split the Bill?</string>
     <string name="minus_button_context_desc">minus button for picker, which gets grayed out when the number is one</string>
+    <string name="plus_button_context_desc">plus button for picker</string>
+    <string name="tip_amount">Tip Amount: %s</string>
+    <string name="check_total">Check Total: %s</string>
+    <string name="per_person_total">Total per Person: %s</string>
 </resources>
