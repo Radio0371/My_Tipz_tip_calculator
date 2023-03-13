@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardActions
@@ -14,8 +15,8 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
-import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -27,7 +28,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.mytipz.ui.theme.MyTipzTheme
-import java.text.Format
 import java.text.NumberFormat
 import kotlin.math.round
 
@@ -71,9 +71,11 @@ fun MyTipz() {
 
 
     Column(
-        verticalArrangement = Arrangement.Center,
+        //verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        Spacer(modifier = Modifier.height(48.dp))
+        TitleBanner()
         InputField(
             textLabel = R.string.bill_amount_input_label,
             value = billAmountString,
@@ -95,7 +97,7 @@ fun MyTipz() {
                 imeAction = ImeAction.Done
             )
         )
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(24.dp))
         SwitchControl(
             switchText = R.string.round_total,
             trueState = roundUpTotal,
@@ -114,6 +116,7 @@ fun MyTipz() {
                 increaseSplitNum = { splitBillNumWays = increaseSplit(splitNum = splitBillNumWays) },
                 decreaseSplitNum = { splitBillNumWays = decreaseSplit(splitNum = splitBillNumWays) }
             )
+            Spacer(modifier = Modifier.height(8.dp))
         }
         Spacer(modifier = Modifier.height(20.dp))
         Text(
@@ -136,6 +139,31 @@ fun MyTipz() {
             )
         }
     }
+}
+
+@Composable
+fun TitleBanner() {
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        Text(
+            text = stringResource(R.string.app_name),
+            fontSize = 32.sp,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.wrapContentHeight(Alignment.CenterVertically)
+        )
+        Spacer(modifier = Modifier.width(16.dp))
+        Image(
+            painter = painterResource(R.drawable.tipz_logo),
+            contentDescription = stringResource(R.string.app_logo_content_desc),
+            modifier = Modifier.wrapContentHeight(Alignment.CenterVertically)
+        )
+    }
+    Spacer(modifier = Modifier.height(16.dp))
+    Text(
+        text = stringResource(R.string.tip_calculator_title),
+        fontSize = 28.sp,
+        fontWeight = FontWeight.Bold
+    )
+    Spacer(modifier = Modifier.height(48.dp))
 }
 
 @Composable
@@ -166,24 +194,29 @@ fun SwitchControl(
 ) {
     Row(modifier = Modifier
         .fillMaxWidth()
-        .size(64.dp)
+        //.size(64.dp)
     ) {
         Text(
             text = stringResource(switchText),
             fontWeight = FontWeight.Bold,
-            modifier = Modifier.wrapContentWidth(Alignment.Start)
+            modifier = Modifier
+                .padding(start = 12.dp)
+                .wrapContentWidth(Alignment.Start)
         )
         Switch(
             checked = trueState,
             onCheckedChange = onSwitch,
-            modifier = Modifier.wrapContentWidth(Alignment.End),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(end = 12.dp)
+                .wrapContentWidth(Alignment.End),
             colors = SwitchDefaults.colors(
                 checkedThumbColor = Color.Green,
                 checkedTrackColor = colorResource(id = R.color.dark_green),
-                checkedTrackAlpha = 0.5f,
+                checkedTrackAlpha = 0.8f,
                 uncheckedThumbColor = Color.DarkGray,
                 uncheckedTrackColor = Color.Gray,
-                uncheckedTrackAlpha = 0.0f
+                uncheckedTrackAlpha = 0.8f
             )
         )
     }
@@ -204,23 +237,35 @@ fun SplitSelection (
         else -> R.drawable.active_minus_button
     }
     Row(
-        modifier = Modifier.fillMaxWidth()
-            .padding(start = 128.dp, end = 128.dp)
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 120.dp, end = 120.dp)
     ) {
         Image(painter = painterResource(id = minusButtonImage),
             contentDescription = stringResource(R.string.minus_button_context_desc),
             modifier = Modifier
                 .clickable(onClick = decreaseSplitNum)
-                .size(height = 32.dp, width = 32.dp)
+                .size(height = 40.dp, width = 40.dp)
         )
         Spacer(modifier = Modifier.width(5.dp))
-        Box(modifier = Modifier.weight(0.3f),
-
+        Surface(modifier = Modifier
+            .weight(1f)
+            .wrapContentWidth(Alignment.CenterHorizontally)
+            .wrapContentHeight(Alignment.CenterVertically)
+            .border(
+                width = 1.dp,
+                color = Color.Black,
+                shape = RectangleShape
+            ),
+            color = Color.Gray
         ) {
             Text(
                 text = "$splitNum",
                 fontSize = 28.sp,
-                modifier = Modifier.wrapContentWidth(Alignment.CenterHorizontally)
+                modifier = Modifier
+                    .wrapContentWidth(Alignment.CenterHorizontally)
+                    .padding(start = 30.dp, end = 30.dp, top = 3.dp, bottom = 3.dp),
+                //color = Color.Black
             )
         }
         Spacer(modifier = Modifier.width(5.dp))
@@ -228,7 +273,7 @@ fun SplitSelection (
             contentDescription = stringResource(R.string.plus_button_context_desc),
             modifier = Modifier
                 .clickable(onClick = increaseSplitNum)
-                .size(height = 32.dp, width = 32.dp)
+                .size(height = 40.dp, width = 40.dp)
         )
     }
 }
